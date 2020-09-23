@@ -133,7 +133,12 @@ int main()
 		{
 			// Receive as much data from the client as will fit in the buffer.
 			int count = recv(clientSocket, buffer, MESSAGESIZE, 0);
-			// FIXME: check for errors from recv
+			// check for errors from recv
+			if (count == SOCKET_ERROR)
+			{
+				die("received strange-sized message");
+			}
+
 
 			if (count <= 0) {
 				printf("Client closed connection\n");
@@ -156,14 +161,13 @@ int main()
 			printf("'\n");
 
 			// Send the same data back to the client.
-			send(clientSocket, buffer, MESSAGESIZE, 0);
+			SentBytes = send(clientSocket, buffer, MESSAGESIZE, 0);
 			
 			//check for errors from send
-			/*if (send(clientSocket, buffer, MESSAGESIZE, 0) > MESSAGESIZE || send(clientSocket, buffer, MESSAGESIZE, 0) <= 0)
+			if (SentBytes == SOCKET_ERROR)
 			{
 				die("sent strange-sized message");
-			}*/
-			
+			}			
 		}
 
 		printf("Closing connection\n");
