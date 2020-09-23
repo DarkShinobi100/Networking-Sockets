@@ -150,7 +150,7 @@ int main()
 			die("received an issue with the message");
 		}
 
-		if (count != MESSAGESIZE) {
+		if (count > MESSAGESIZE) {
 			die("Got strange-sized message from client");
 		}
 

@@ -12,6 +12,9 @@
 #include <string.h>
 #include <winsock2.h>
 
+//to make uppercase
+#include <ctype.h>
+
 #pragma comment(lib, "ws2_32.lib")
 
 
@@ -149,6 +152,11 @@ int main()
 			if (memcmp(buffer, "quit", 4) == 0) {
 				printf("Client asked to quit\n");
 				break;
+			}
+
+			for (int i = 0; i < MESSAGESIZE; i++)
+			{//make message uppercase
+				buffer[i] = toupper(buffer[i]);
 			}
 
 			// (Note that recv will not write a \0 at the end of the message it's
