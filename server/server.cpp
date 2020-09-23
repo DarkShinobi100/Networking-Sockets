@@ -50,7 +50,16 @@ int main()
 
 	// Create a TCP socket that we'll use to listen for connections.
 	SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-	// FIXME: we should test for error here
+
+	//check socket is created correctly
+	if (serverSocket == INVALID_SOCKET)
+	{
+		die("Error: Invalid socket");
+	}
+	else
+	{
+		printf("Successful Socket\n");
+	}
 
 	// Fill out a sockaddr_in structure to describe the address we'll listen on.
 	sockaddr_in serverAddr;
