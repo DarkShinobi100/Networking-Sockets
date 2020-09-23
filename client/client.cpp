@@ -28,6 +28,8 @@
 // The (fixed) size of message that we send between the two programs
 #define MESSAGESIZE 40
 
+// The message the client will send when the message is too long
+#define TOOLONG "Too long, please only use 40 characters"
 
 // Prototypes
 void die(const char *message);
@@ -113,19 +115,45 @@ int main()
 		std::string line;
 		std::getline(std::cin, line);
 		// Now "line" contains what the user typed (without the trailing \n).
+		
+		// if line.size() is bigger than the buffer it'll overflow (and likely corrupt memory)
+		if (line.size() > MESSAGESIZE)
+		{
+			//if it is too large
+			// Fill the buffer with - characters to start with.
+			memset(buffer, '-', MESSAGESIZE);
 
-		// Copy the line into the buffer, filling the rest with dashes.
-		memset(buffer, '-', MESSAGESIZE);
-		memcpy(buffer, line.c_str(), line.size());
-		// FIXME: if line.size() is bigger than the buffer it'll overflow (and likely corrupt memory)
+			// Send a error message to the server.
+			memcpy(buffer, TOOLONG, strlen(TOOLONG));
+		}
+		else
+		{
+			// Copy the line into the buffer, filling the rest with dashes.
+			memset(buffer, '-', MESSAGESIZE);
+			memcpy(buffer, line.c_str(), line.size());
+		}
 
 		// Send the message to the server.
-		send(sock, buffer, MESSAGESIZE, 0);
-		// FIXME: check for error from send
+		int SentBytes =send(sock, buffer, MESSAGESIZE, 0);
+
+		//check for errors from send
+		if (SentBytes == SOCKET_ERROR)
+		{
+			die("sent strange-sized message");
+		}
 
 		// Read a response back from the server.
 		int count = recv(sock, buffer, MESSAGESIZE, 0);
-		// FIXME: check for error from recv
+		// check for error from recv
+		if (count == SOCKET_ERROR)
+		{
+			die("received an issue with the message");
+		}
+
+		if (count != MESSAGESIZE) {
+			die("Got strange-sized message from client");
+		}
+
 		if (count <= 0)
 		{
 			printf("Server closed connection\n");

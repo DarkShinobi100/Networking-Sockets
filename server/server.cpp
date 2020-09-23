@@ -136,9 +136,8 @@ int main()
 			// check for errors from recv
 			if (count == SOCKET_ERROR)
 			{
-				die("received strange-sized message");
+				die("received an issue with the message");
 			}
-
 
 			if (count <= 0) {
 				printf("Client closed connection\n");
