@@ -51,7 +51,16 @@ int main()
 
 	// Create a TCP socket that we'll connect to the server
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	// FIXME: check for errors from socket
+	
+	//check socket is created correctly
+	if (sock == INVALID_SOCKET)
+	{
+		die("Error: Invalid socket");
+	}
+	else
+	{
+		printf("Successful Socket\n");
+	}
 
 	// Fill out a sockaddr_in structure with the address that
 	// we want to connect to.
@@ -82,8 +91,12 @@ int main()
 	// We expect the server to send us a welcome message (WELCOME) when we connect.
 
 	// Receive a message.
-	recv(sock, buffer, MESSAGESIZE, 0);
-	// FIXME: check for errors, or for unexpected message size
+	int RecivedMessage = recv(sock, buffer, MESSAGESIZE, 0);
+	// check for errors, or for unexpected message size
+	if (RecivedMessage == SOCKET_ERROR || RecivedMessage > MESSAGESIZE)
+	{
+		die("received strange-sized message");
+	}
 
 	// Check it's what we expected.
 	if (memcmp(buffer, WELCOME, strlen(WELCOME)) != 0)
