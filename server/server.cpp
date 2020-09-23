@@ -97,9 +97,17 @@ int main()
 		SOCKET clientSocket = accept(serverSocket, (sockaddr *) &clientAddr, &addrSize);
 		if (clientSocket == INVALID_SOCKET)
 		{
-			die("accept failed");
-			// FIXME: in a real server, we wouldn't want the server to crash if
+			//die("accept failed");
+			// in a real server, we wouldn't want the server to crash if
 			// it failed to accept a connection -- recover more effectively!
+
+			//if we fail to accept a connection			
+			printf("accept failed\n");
+			//delete current data
+			closesocket(serverSocket);
+			WSACleanup();
+			//restart the server
+			main();
 		}
 
 		printf("Client has connected from IP address %s, port %d!\n", inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
