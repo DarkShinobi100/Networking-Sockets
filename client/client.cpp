@@ -59,6 +59,8 @@ int main()
 	addr.sin_family = AF_INET;
 	// htons converts the port number to network byte order (big-endian).
 	addr.sin_port = htons(SERVERPORT);
+	//addr.sin_port = (SERVERPORT); assert error
+
 	addr.sin_addr.s_addr = inet_addr(SERVERIP);
 	
 	// inet_ntoa formats an IP address as a string.
