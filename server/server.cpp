@@ -122,11 +122,11 @@ int main()
 		memcpy(buffer, WELCOME, strlen(WELCOME));
 
 		//check for errors from send
-		send(clientSocket, buffer, MESSAGESIZE, 0);
-		/*if (send(clientSocket, buffer, MESSAGESIZE, 0) > MESSAGESIZE || send(clientSocket, buffer, MESSAGESIZE, 0)<=0 )
+		int SentBytes = send(clientSocket, buffer, MESSAGESIZE, 0);
+		if (SentBytes == SOCKET_ERROR)
 		{
 			die("sent strange-sized message");
-		}*/
+		}
 		 
 
 		while (true)
